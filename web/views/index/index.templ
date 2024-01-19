@@ -1,0 +1,32 @@
+package index
+
+var styles = []string{
+	"/static/styles/styles.css",
+	"/static/styles/tailwind-output.css",
+}
+
+var scripts = []string{
+	"https://unpkg.com/htmx.org@1.9.10",
+}
+
+templ Index() {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title hx-swap-oob="true" id="TITLE">Index</title>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			for _, style := range styles {
+				<link rel="stylesheet" href={ style }/>
+			}
+			for _, script := range scripts {
+				<script src={ script } crossorigin="anonymous"></script>
+			}
+		</head>
+		<body class="prose dark:prose-invert">
+			<main id="container mx-auto">
+				{ children... }
+			</main>
+		</body>
+	</html>
+}
