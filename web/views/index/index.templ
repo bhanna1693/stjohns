@@ -3,7 +3,6 @@ package index
 import "stjohns/web/views/nav"
 import "stjohns/web/views/footer"
 import "stjohns/models"
-import "stjohns/web/views/snackbar"
 
 var styles = []string{
 	"/static/styles/styles.css",
@@ -35,7 +34,6 @@ templ Index(page models.Page) {
 		</head>
 		<body class="">
 			@nav.Nav()
-			@snackbar.SnackBarContainer()
 			<main class="container max-w-screen-lg mx-auto">
 				{ children... }
 			</main>

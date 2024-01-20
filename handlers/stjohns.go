@@ -60,8 +60,8 @@ func HomeHandler(e echo.Context) error {
 func ContactHandler(e echo.Context) error {
 	from := os.Getenv("EMAIL")
 	password := os.Getenv("EMAIL_PASSWORD")
-	smtpServer := "smtp.gmail.com"
-	smtpPort := "587"
+	smtpServer := os.Getenv("SMTP_SERVER")
+	smtpPort := os.Getenv("SMTP_PORT")
 	smtpHost := smtpServer + ":" + smtpPort
 	auth := smtp.PlainAuth("", from, password, smtpServer)
 
@@ -81,14 +81,18 @@ func ContactHandler(e echo.Context) error {
 			"\r\n" +
 			contactForm.Message + "\r\n",
 	)
+
 	if err := smtp.SendMail(smtpHost, auth, from, to, message); err != nil {
 		log.Println(err)
-		return utils.Render(e, snackbar.ShowSnackBarScript(models.Alert{
+		// e.Response().Writer.WriteHeader(500)
+		// e.Response().Writer.Write([]byte("Failed to send message"))
+		// return err
+		return utils.Render(e, snackbar.Alert(models.Alert{
 			Type:    "danger",
 			Message: "Failed to send message",
 		}))
 	}
-	return utils.Render(e, snackbar.ShowSnackBarScript(models.Alert{
+	return utils.Render(e, snackbar.Alert(models.Alert{
 		Type:    "success",
 		Message: "Message sent successfully",
 	}))
