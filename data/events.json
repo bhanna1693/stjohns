@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Sunday Service",
+        "description": "Join us for our Sunday Service",
+        "date": "Sunday",
+        "time": "9:00am"
+    },
+    {
+        "title": "Bible Study",
+        "description": "Join us for our Bible Study",
+        "date": "Sunday",
+        "time": "10:00am"
+    },
+    {
+        "title": "DONUT SUNDAY",
+        "description": "Join us for our Donut Sunday",
+        "date": "Sunday",
+        "time": "10:00am"
+    }
+]

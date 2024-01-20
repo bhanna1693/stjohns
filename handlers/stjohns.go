@@ -1,43 +1,95 @@
 package handlers
 
 import (
+	"encoding/json"
+	"log"
+	"net/smtp"
+	"os"
 	"stjohns/models"
 	"stjohns/utils"
+	"stjohns/web/views/alert"
 	"stjohns/web/views/home"
 
 	"github.com/labstack/echo/v4"
 )
+
+func getEvents() []models.Event {
+	file, err := os.Open("data/events.json")
+	if err != nil {
+		log.Fatalf("failed to open file: %s", err)
+	}
+	defer file.Close()
+
+	var data []models.Event
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&data)
+	if err != nil {
+		log.Fatalf("failed to decode JSON: %s", err)
+	}
+	return data
+}
+
+func getServices() []models.Service {
+	file, err := os.Open("data/services.json")
+	if err != nil {
+		log.Fatalf("failed to open file: %s", err)
+	}
+	defer file.Close()
+
+	var data []models.Service
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&data)
+	if err != nil {
+		log.Fatalf("failed to decode JSON: %s", err)
+	}
+	return data
+}
 
 func HomeHandler(e echo.Context) error {
 	data := models.PageWithEvents{
 		Page: models.Page{
 			Title: "St. John's Lutheran Church",
 		},
-		Events: []models.Event{
-			{
-				Title:       "Sunday Service",
-				Description: "Join us for our Sunday service!",
-				Date:        "Sunday, January 1st",
-				Time:        "10:00 AM",
-			},
-			{
-				Title:       "Wednesday Service",
-				Description: "Join us for our Wednesday service!",
-				Date:        "Wednesday, January 4th",
-				Time:        "7:00 PM",
-			},
-		},
-		Services: []models.Service{
-			{
-				Title: "Sunday Service",
-				Time:  "9:00 AM",
-			},
-			{
-				Title: "Wednesday Service",
-				Time:  "7:00 PM",
-			},
-		},
+		Events:   getEvents(),
+		Services: getServices(),
 	}
 
 	return utils.Render(e, home.Home(data))
+}
+
+func ContactHandler(e echo.Context) error {
+	from := os.Getenv("EMAIL")
+	password := os.Getenv("EMAIL_PASSWORD")
+	smtpServer := "smtp.gmail.com"
+	smtpPort := "587"
+	smtpHost := smtpServer + ":" + smtpPort
+	auth := smtp.PlainAuth("", from, password, smtpServer)
+
+	var contactForm models.Contact
+	if err := e.Bind(&contactForm); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	to := []string{contactForm.Email}
+	subject := "New Message From " + contactForm.Name + "\r\n"
+
+	message := []byte(
+		"From: " + from + "\r\n" +
+			"To: " + to[0] + "\r\n" +
+			"Subject: " + subject + "\r\n" +
+			"\r\n" +
+			contactForm.Message + "\r\n",
+	)
+	if err := smtp.SendMail(smtpHost, auth, from, to, message); err != nil {
+		log.Println(err)
+		return utils.Render(e, alert.Alert(models.Alert{
+			Type:    "danger",
+			Message: "Failed to send message",
+		}))
+	}
+	return utils.Render(e, alert.Alert(models.Alert{
+		Type:    "success",
+		Message: "Message sent successfully",
+	}))
 }

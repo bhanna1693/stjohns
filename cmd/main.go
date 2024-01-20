@@ -14,8 +14,12 @@ func main() {
 
 	e := echo.New()
 	e.Static("/static", "web/static")
+
 	e.GET("/", func(e echo.Context) error {
 		return handlers.HomeHandler(e)
+	})
+	e.POST("/contact", func(e echo.Context) error {
+		return handlers.ContactHandler(e)
 	})
 	e.Logger.Fatal(e.Start(":80"))
 }

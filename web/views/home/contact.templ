@@ -4,18 +4,27 @@ templ Contact() {
 	<section id="contact" class="py-12 md:py-24 lg:py-32">
 		<div>
 			<h2 class="text-3xl font-bold text-center mb-10">Contact Us</h2>
-			<form class="w-full max-w-md mx-auto space-y-4">
+			<form
+				method="POST"
+				action="/contact"
+				hx-post="/contact"
+				hx-swap="afterend"
+				class="w-full max-w-md mx-auto space-y-4"
+			>
 				<input
+					name="name"
 					class="form-input"
 					placeholder="Name"
 					type="text"
 				/>
 				<input
+					name="email"
 					class="form-input"
 					placeholder="Email"
 					type="email"
 				/>
 				<textarea
+					name="message"
 					class="form-input h-32"
 					placeholder="Message"
 				></textarea>

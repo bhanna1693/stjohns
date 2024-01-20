@@ -41,4 +41,21 @@
         @apply hover:bg-indigo-400;
         @apply focus:ring-indigo-500;
     }
+
+    .alert {
+        @apply text-base px-4 py-3 rounded-md;
+        @apply leading-5;
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+}
+
+/* styles placed outside @layer will always be compiled */
+.alert-success {
+    @apply text-green-700 bg-green-100;
+    @apply dark:text-green-100 dark:bg-green-700;
+}
+
+.alert-danger {
+    @apply text-red-700 bg-red-100;
+    @apply dark:text-red-100 dark:bg-red-700;
 }

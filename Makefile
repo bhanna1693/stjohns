@@ -17,7 +17,7 @@ build-templ:
 	templ generate
 
 build-tailwind: tmp/tailwindcss
-	./tmp/tailwindcss -i ./web/config/tailwind-input.css -o web/static/styles/tailwind-output.css --minify
+	./tmp/tailwindcss -i ./web/static/styles/tailwind-input.css -o web/static/styles/tailwind-output.css --minify
 
 fetch-tailwindcss:
 	mkdir tmp
