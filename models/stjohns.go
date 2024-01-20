@@ -7,11 +7,17 @@ type Event struct {
 	Time        string
 }
 
+type Service struct {
+	Title string
+	Time  string
+}
+
 type Page struct {
 	Title string
 }
 
 type PageWithEvents struct {
 	Page
-	Events []Event
+	Events   []Event
+	Services []Service
 }

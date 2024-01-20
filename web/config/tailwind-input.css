@@ -3,3 +3,42 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply antialiased;
+        @apply bg-gray-100 text-gray-900;
+        @apply dark:bg-gray-900 dark:text-white;
+    }
+
+    .text-muted {
+        @apply text-gray-500;
+        @apply dark:text-gray-400;
+    }
+}
+
+@layer components {
+    .card {
+        @apply bg-white rounded-lg border border-gray-300;
+        @apply dark:bg-gray-800 dark:text-white;
+    }
+
+    .form-input {
+        @apply block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm appearance-none;
+        @apply dark:bg-gray-800 dark:text-white dark:border-gray-600;
+        @apply disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
+    }
+
+    .btn {
+        @apply px-4 py-2 rounded-md;
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2
+    }
+
+    .btn-primary {
+        @apply text-white bg-indigo-500;
+        @apply dark:bg-indigo-600;
+        @apply hover:bg-indigo-400;
+        @apply focus:ring-indigo-500;
+    }
+}
