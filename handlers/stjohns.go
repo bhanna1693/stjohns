@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/smtp"
 	"os"
+	"path/filepath"
 	"stjohns/models"
 	"stjohns/utils"
 	"stjohns/web/views/home"
@@ -14,23 +15,28 @@ import (
 )
 
 func getEvents() []models.Event {
-	file, err := os.Open("data/events.json")
+	// Use filepath.Join for building file paths to handle different OS path separators
+	dataFilePath := filepath.Join("data", "events.json")
+
+	// Open the JSON file
+	file, err := os.Open(dataFilePath)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
 	defer file.Close()
 
-	var data []models.Event
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&data)
-	if err != nil {
+	// Decode the JSON file
+	var events []models.Event
+	if err := json.NewDecoder(file).Decode(&events); err != nil {
 		log.Fatalf("failed to decode JSON: %s", err)
 	}
-	return data
+
+	return events
 }
 
 func getServices() []models.Service {
-	file, err := os.Open("data/services.json")
+	dataFilePath := filepath.Join("data", "services.json")
+	file, err := os.Open(dataFilePath)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
