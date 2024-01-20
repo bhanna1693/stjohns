@@ -1,0 +1,47 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Download Tailwind CSS Standalone CLI
+      run: |
+        curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+        chmod +x tailwindcss-linux-x64
+        mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
+
+    - name: Run Tailwind CLI to compile CSS
+      run: tailwindcss -i ./web/static/styles/tailwind-input.css -o ./web/static/styles/tailwind-output.css --minify
+
+    - name: Generate templates using templ
+      run: |
+        go install github.com/a-h/templ/cmd/templ@latest
+        templ generate
+      
+    - name: Build
+      run: CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
+      
+    # - name: Test with the Go CLI
+    #   run: go test
+
+    - name: Build Docker image
