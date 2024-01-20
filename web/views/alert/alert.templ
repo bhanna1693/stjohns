@@ -9,9 +9,9 @@ script showSnackBar(alert models.Alert) {
     snackbar.classList.remove("hidden");
     
     setTimeout(() => { 
+        snackbar.classList.add("hidden"); 
         snackbar.classList.remove("alert-" + alert.Type);
         snackbar.innerHTML = "";
-        snackbar.classList.add("hidden"); 
     }, 5000);
 }
 
