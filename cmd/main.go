@@ -10,7 +10,10 @@ import (
 
 func main() {
 	log.Println("Starting server...")
-	godotenv.Load()
+
+	if err := godotenv.Load(); err != nil {
+		log.Println("Failed to load .env file, assuming production")
+	}
 
 	e := echo.New()
 	e.Static("/static", "web/static")
@@ -21,5 +24,5 @@ func main() {
 	e.POST("/contact", func(e echo.Context) error {
 		return handlers.ContactHandler(e)
 	})
-	e.Logger.Fatal(e.Start(":80"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
