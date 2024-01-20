@@ -44,27 +44,14 @@ jobs:
     # - name: Test with the Go CLI
     #   run: go test
 
-    - name: Build and Push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/stjohns-go-web-app:latest
-        build-args: |
-          COMMIT_SHA=${{ github.sha }}
-          BRANCH=${{ github.ref }}
-          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          VERSION=1.0.0
-        file: ./Dockerfile
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
     
-    - name: Deploy to DigitalOcean
-      uses: appleboy/ssh-action@master
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
       with:
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-        username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-        key: ${{ secrets.DIGITAL_OCEAN_PRIVATE_KEY }}
-        port: ${{ secrets.DIGITAL_OCEAN_PORT }}
-        script: |
-          docker stop stjohns-go-web-app
-          docker rm stjohns-go-web-app
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/stjohns-go-web-app:latest
-          docker run -d --name stjohns-go-web-app -p 80:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/stjohns-go-web-app:latest
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
