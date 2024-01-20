@@ -7,8 +7,8 @@ import (
 	"os"
 	"stjohns/models"
 	"stjohns/utils"
-	"stjohns/web/views/alert"
 	"stjohns/web/views/home"
+	"stjohns/web/views/snackbar"
 
 	"github.com/labstack/echo/v4"
 )
@@ -83,12 +83,12 @@ func ContactHandler(e echo.Context) error {
 	)
 	if err := smtp.SendMail(smtpHost, auth, from, to, message); err != nil {
 		log.Println(err)
-		return utils.Render(e, alert.Alert(models.Alert{
+		return utils.Render(e, snackbar.ShowSnackBarScript(models.Alert{
 			Type:    "danger",
 			Message: "Failed to send message",
 		}))
 	}
-	return utils.Render(e, alert.Alert(models.Alert{
+	return utils.Render(e, snackbar.ShowSnackBarScript(models.Alert{
 		Type:    "success",
 		Message: "Message sent successfully",
 	}))

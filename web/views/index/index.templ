@@ -3,6 +3,7 @@ package index
 import "stjohns/web/views/nav"
 import "stjohns/web/views/footer"
 import "stjohns/models"
+import "stjohns/web/views/snackbar"
 
 var styles = []string{
 	"/static/styles/styles.css",
@@ -12,13 +13,6 @@ var styles = []string{
 
 var scripts = []string{
 	"https://unpkg.com/htmx.org@1.9.10",
-}
-
-script removeSnackBar() {
-    var snackbar = document.getElementById("ALERT");
-	snackbar.classList.add("hidden"); 
-	snackbar.classList.remove("alert-success", "alert-danger");
-	snackbar.innerHTML = "";
 }
 
 templ Index(page models.Page) {
@@ -41,13 +35,8 @@ templ Index(page models.Page) {
 		</head>
 		<body class="">
 			@nav.Nav()
-			<div
-				id="ALERT"
-				hx-swap-oob="true"
-				onclick={ removeSnackBar() }
-				class="hidden fixed left-1/2 bottom-4 transition-all duration-500 ease-in-out transform -translate-x-1/2 w-1/2 max-w-2xl px-4 py-2 rounded-md text-white text-center"
-			></div>
-			<main class="container mx-auto">
+			@snackbar.SnackBarContainer()
+			<main class="container max-w-screen-lg mx-auto">
 				{ children... }
 			</main>
 			@footer.Footer()
