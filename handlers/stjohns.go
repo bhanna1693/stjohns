@@ -64,6 +64,7 @@ func HomeHandler(e echo.Context) error {
 }
 
 func ContactHandler(e echo.Context) error {
+	log.Println("Contact form being submitted...")
 	from := os.Getenv("EMAIL")
 	password := os.Getenv("EMAIL_PASSWORD")
 	smtpServer := os.Getenv("SMTP_SERVER")
@@ -71,12 +72,15 @@ func ContactHandler(e echo.Context) error {
 	smtpHost := smtpServer + ":" + smtpPort
 	auth := smtp.PlainAuth("", from, password, smtpServer)
 
+	log.Println("from: " + from + " password: " + password + " smtpServer: " + smtpServer + " smtpPort: " + smtpPort)
+
 	var contactForm models.Contact
 	if err := e.Bind(&contactForm); err != nil {
 		log.Println(err)
 		return err
 	}
 
+	log.Println(contactForm)
 	to := []string{contactForm.Email}
 	subject := "New Message From " + contactForm.Name + "\r\n"
 
@@ -87,7 +91,8 @@ func ContactHandler(e echo.Context) error {
 			"\r\n" +
 			contactForm.Message + "\r\n",
 	)
-
+	log.Println("Sending message...")
+	log.Println(message)
 	if err := smtp.SendMail(smtpHost, auth, from, to, message); err != nil {
 		log.Println(err)
 		// e.Response().Writer.WriteHeader(500)
