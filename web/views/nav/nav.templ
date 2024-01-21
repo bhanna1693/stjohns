@@ -49,6 +49,20 @@ script toggleMenu() {
 	navMenu.classList.toggle("hidden");
 }
 
+templ facebook() {
+	<a
+		class="btn btn-icon"
+		href="https://www.facebook.com/StJohnsMillvale"
+		target="_blank"
+		title="Facebook"
+	>
+		<svg class="fill-black dark:fill-white" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+			<!-- This is a generic social media icon -->
+			<path d="M22.675,0H1.325C0.595,0,0,0.595,0,1.325v21.349C0,23.404,0.595,24,1.325,24h11.489V14.709H9.626v-3.494h3.188V8.463c0-3.159,1.929-4.882,4.745-4.882c1.349,0,2.506,0.1,2.843,0.145v3.312l-1.95,0.001c-1.529,0-1.826,0.728-1.826,1.795v2.352h3.653l-0.476,3.494h-3.177V24h6.349c0.729,0,1.325-0.596,1.325-1.326V1.325C24,0.595,23.404,0,22.675,0z"></path>
+		</svg>
+	</a>
+}
+
 templ Nav() {
 	<header class="sticky top-0 w-full px-2 py-4 sm:px-4 sm:py-6 bg-white dark:bg-gray-800">
 		<div class="container mx-auto flex flex-wrap items-center justify-between">
@@ -77,6 +91,7 @@ templ Nav() {
 					<a class="font-medium hover:underline" href="#services">Services</a>
 					<a class="font-medium hover:underline" href="#beliefs">Beliefs</a>
 					<a class="font-medium hover:underline" href="#contact">Contact</a>
+					@facebook()
 					@toggleBtn()
 				</div>
 			</nav>
