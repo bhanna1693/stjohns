@@ -61,9 +61,10 @@ jobs:
     
     - name: List files in the repository
       run: ls -alh
-      
+
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/st-johns-web-app:latest
+        context: .
