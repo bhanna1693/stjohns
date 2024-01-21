@@ -20,7 +20,6 @@ build-tailwind: tmp/tailwindcss
 	./tmp/tailwindcss -i ./web/static/styles/tailwind-input.css -o web/static/styles/tailwind-output.css --minify
 
 fetch-tailwindcss:
-	mkdir tmp
 	curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/$(TAILWIND_RELEASE)
 	chmod +x $(TAILWIND_RELEASE)
 	mv $(TAILWIND_RELEASE) tmp/tailwindcss
