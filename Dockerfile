@@ -3,7 +3,7 @@ FROM alpine:latest
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the binary file from the host to the container
+# Copy the binary file from the build context to the container
 COPY ./main .
 
 # Copy static files
