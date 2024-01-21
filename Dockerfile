@@ -3,6 +3,8 @@ FROM alpine:latest
 # Set the working directory inside the container
 WORKDIR /app
 
+RUN apk --no-cache add ca-certificates
+
 # Copy the binary file from the build context to the container
 COPY ./main .
 

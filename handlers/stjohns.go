@@ -64,15 +64,16 @@ func HomeHandler(e echo.Context) error {
 }
 
 func ContactHandler(e echo.Context) error {
-	log.Println("Contact form being submitted...")
+	log.Println("Received contact form submission")
 	from := os.Getenv("EMAIL")
+	to := []string{os.Getenv("EMAIL")}
 	password := os.Getenv("EMAIL_PASSWORD")
 	smtpServer := os.Getenv("SMTP_SERVER")
 	smtpPort := os.Getenv("SMTP_PORT")
 	smtpHost := smtpServer + ":" + smtpPort
 	auth := smtp.PlainAuth("", from, password, smtpServer)
 
-	log.Println("from: " + from + " password: " + password + " smtpServer: " + smtpServer + " smtpPort: " + smtpPort)
+	log.Println("from: " + from + " to: " + to[0] + " password: " + password + " smtpServer: " + smtpServer + " smtpPort: " + smtpPort)
 
 	var contactForm models.Contact
 	if err := e.Bind(&contactForm); err != nil {
@@ -81,8 +82,8 @@ func ContactHandler(e echo.Context) error {
 	}
 
 	log.Println(contactForm)
-	to := []string{contactForm.Email}
-	subject := "New Message From " + contactForm.Name + "\r\n"
+	subject := "New Message From " + contactForm.Name + " (" + contactForm.Email + ")" + " via stjohns-lutheran-church.com"
+	contactForm.Message = contactForm.Message + "\n\n" + "Sent from: " + contactForm.Email
 
 	message := []byte(
 		"From: " + from + "\r\n" +
@@ -91,8 +92,6 @@ func ContactHandler(e echo.Context) error {
 			"\r\n" +
 			contactForm.Message + "\r\n",
 	)
-	log.Println("Sending message...")
-	log.Println(message)
 	if err := smtp.SendMail(smtpHost, auth, from, to, message); err != nil {
 		log.Println(err)
 		// e.Response().Writer.WriteHeader(500)
@@ -103,6 +102,7 @@ func ContactHandler(e echo.Context) error {
 			Message: "Failed to send message",
 		}))
 	}
+	log.Println("Message sent successfully to " + to[0])
 	return utils.Render(e, snackbar.Alert(models.Alert{
 		Type:    "success",
 		Message: "Message sent successfully",
