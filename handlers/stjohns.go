@@ -70,9 +70,6 @@ func sendEmailFromStJohnsToStJohns(contactForm models.Contact) error {
 	smtpServer := os.Getenv("SMTP_SERVER")
 	smtpPort := os.Getenv("SMTP_PORT")
 
-	log.Println("from: " + from + " to: " + to[0] + " password: " + password + " smtpServer: " + smtpServer + " smtpPort: " + smtpPort)
-
-	log.Println(contactForm)
 	subject := "New Message From " + contactForm.Name + " (" + contactForm.Email + ")" + " via stjohns-lutheran-church.com"
 	message := contactForm.Message + "\n\n" + "Sent from: " + contactForm.Email
 
@@ -95,15 +92,22 @@ func sendEmail(from, password, smtpServer, smtoPort string, to []string, subject
 func ContactHandler(e echo.Context) error {
 	log.Println("Received contact form submission")
 
-	var contactForm models.Contact
-	if err := e.Bind(&contactForm); err != nil {
+	var contactForm = new(models.Contact)
+	if err := e.Bind(contactForm); err != nil {
 		log.Println(err)
 		return err
+	}
+	if err := e.Validate(contactForm); err != nil {
+		log.Println(err)
+		return utils.Render(e, snackbar.Alert(models.Alert{
+			Type:    "danger",
+			Message: "Validation error - Failed to send message",
+		}))
 	}
 
 	log.Println(contactForm)
 
-	if err := sendEmailFromStJohnsToStJohns(contactForm); err != nil {
+	if err := sendEmailFromStJohnsToStJohns(*contactForm); err != nil {
 		log.Println(err)
 		// e.Response().Writer.WriteHeader(500)
 		// e.Response().Writer.Write([]byte("Failed to send message"))

@@ -23,9 +23,9 @@ type PageWithEvents struct {
 }
 
 type Contact struct {
-	Name    string `form:"name"`
-	Email   string `form:"email"`
-	Message string `form:"message"`
+	Name    string `form:"name" validate:"required"`
+	Email   string `form:"email" validate:"required,email"`
+	Message string `form:"message" validate:"required"`
 }
 
 type Alert struct {
