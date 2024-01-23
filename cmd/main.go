@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"stjohns/handlers"
+
+	"github.com/bhanna1693/stjohns/handlers"
 
 	"github.com/go-playground/validator"
 	"github.com/joho/godotenv"

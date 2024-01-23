@@ -1,4 +1,4 @@
-module stjohns
+module github.com/bhanna1693/stjohns
 
 go 1.21
 

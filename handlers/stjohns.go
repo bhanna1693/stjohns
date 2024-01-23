@@ -6,10 +6,12 @@ import (
 	"net/smtp"
 	"os"
 	"path/filepath"
-	"stjohns/models"
-	"stjohns/utils"
-	"stjohns/web/views/home"
-	"stjohns/web/views/snackbar"
+
+	"github.com/bhanna1693/stjohns/models"
+	"github.com/bhanna1693/stjohns/utils"
+
+	"github.com/bhanna1693/stjohns/web/views/home"
+	"github.com/bhanna1693/stjohns/web/views/snackbar"
 
 	"github.com/labstack/echo/v4"
 )
